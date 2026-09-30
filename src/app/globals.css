@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+/* Identidade do protótipo aprovado: alto contraste para uso em campo
+   (sol, luva, EPI). Tokens usados como classes Tailwind: bg-brand,
+   text-muted, border-line etc. */
+@theme {
+  --color-ink: #17212b;
+  --color-muted: #52606d;
+  --color-line: #d5d9d2;
+  --color-ground: #f2f3ef;
+  --color-brand: #16405f;
+  --color-brand-dark: #0e2c42;
+  --color-brand-soft: #eaf1f7;
+  --color-accent: #f2b233;
+  --color-accent-soft: #fff3d6;
+  --color-accent-ink: #7a4b00;
+  --color-ok: #1f7a45;
+  --color-ok-soft: #d9efe1;
+  --color-nc: #b42318;
+  --color-nc-soft: #fdf0ef;
+  --color-nc-ink: #8a1c14;
+  --font-sans: var(--font-plex-sans), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+}
+
+body {
+  background: var(--color-ground);
+  color: var(--color-ink);
+}

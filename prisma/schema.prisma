@@ -1,0 +1,28 @@
+// Software de Inspeção Ex — ERGA Engenharia.
+// Banco PRÓPRIO: nada é compartilhado com o CRMEx. Dados de cliente vêm da
+// API do CRMEx (ver INTEGRACAO.md). O modelo cresce fase a fase (ROTEIRO.md).
+// docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ADMIN // administração do sistema (usuários, modelos de documento)
+  INSPETOR // coleta em campo e revisão de projetos
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      UserRole @default(INSPETOR)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

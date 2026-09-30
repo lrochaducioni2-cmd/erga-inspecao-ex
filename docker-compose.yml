@@ -1,0 +1,16 @@
+# Postgres local para desenvolvimento (porta 5433 para não colidir com o do CRMEx).
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: inspecao
+      POSTGRES_PASSWORD: inspecao
+      POSTGRES_DB: inspecao
+    ports:
+      - "5433:5432"
+    volumes:
+      - inspecao_db_data:/var/lib/postgresql/data
+
+volumes:
+  inspecao_db_data:
