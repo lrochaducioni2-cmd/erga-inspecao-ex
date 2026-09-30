@@ -49,7 +49,7 @@ Protótipo: https://claude.ai/artifact/T3P8qs21Yh4bGmeU8uryGh
 
 | Fase | Entrega | Situação |
 |---|---|---|
-| **1. Base** | Repositório, login (admin), usuários, leitura de clientes do CRMEx, app instalável, instruções de publicação gratuita | ✅ entregue |
+| **1. Base** | Repositório, login, primeiro acesso (cria o administrador sem computador), usuários, leitura de clientes do CRMEx, app instalável, publicação gratuita com migração automática | ✅ entregue |
 | 2. Projetos | Criar projeto (Inventário ou Inspeção Ex) escolhendo cliente do CRMEx; PI, logo do cliente, status (Rascunho → Em campo → Em revisão → Aprovado → Emitido) | a fazer |
 | 3. Inventário no computador | Ambientes/pontos de liberação, equipamentos Ex/Não Ex, fotos (armazenamento na nuvem), plano de ação automático, exportação Excel/PDF provisória | a fazer |
 | 4. Celular sem internet | Coleta do inventário em campo, fila de sincronização, fotos comprimidas no aparelho | a fazer |

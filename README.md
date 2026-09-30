@@ -23,20 +23,31 @@ npm run crm:mock              # (outro terminal) CRMEx simulado na porta 4000
 npm run dev                   # http://localhost:3001
 ```
 
-## Publicando de graça (fase de testes)
+## Publicando de graça (fase de testes) — tudo pelo celular
 
-1. **Banco**: crie um projeto gratuito no [Neon](https://neon.tech) e copie a
-   *connection string* (`DATABASE_URL`).
-2. **App**: importe este repositório na [Vercel](https://vercel.com) (plano
-   Hobby) e configure as variáveis do `.env.example`
-   (`NEXTAUTH_URL` = a URL que a Vercel der).
-3. No seu computador, com o `DATABASE_URL` do Neon no `.env`:
-   `npm run db:deploy && npm run db:seed`.
-4. No iPhone: abra a URL no Safari › Compartilhar › **Adicionar à Tela de Início**.
+1. **Banco (Neon)** — em [neon.tech](https://neon.tech), entre com o GitHub e crie
+   um projeto (região: *São Paulo* se houver). Em **Connect**, desligue
+   *Connection pooling* e copie a *connection string* (`postgresql://…`).
+2. **App (Vercel)** — em [vercel.com](https://vercel.com), entre com o GitHub,
+   **Add New › Project**, importe `erga-inspecao-ex` e, antes de publicar, abra
+   **Environment Variables** e cadastre:
 
-> O plano gratuito da Vercel é para uso não comercial — serve para testar;
-> no uso real nos serviços da ERGA, migrar para o plano pago (≈ US$ 20/mês)
-> ou outra hospedagem.
+   | Nome | Valor |
+   |---|---|
+   | `DATABASE_URL` | a connection string do Neon |
+   | `NEXTAUTH_SECRET` | uma frase longa e aleatória (30+ caracteres) |
+   | `SETUP_CODE` | um código só seu, pedido no primeiro acesso |
+   | `CRM_API_URL` / `CRM_API_TOKEN` | quando o CRMEx expuser a API (pode deixar para depois) |
+
+3. Toque em **Deploy**. As tabelas do banco são criadas automaticamente a cada
+   publicação (`vercel-build`).
+4. Abra a URL que a Vercel mostrar: a tela **Primeiro acesso** pede o
+   `SETUP_CODE` e cria o seu usuário administrador. Ela só aparece uma vez.
+5. No iPhone: Safari › Compartilhar › **Adicionar à Tela de Início**.
+
+> `NEXTAUTH_URL` não é necessário na Vercel. O plano gratuito da Vercel é
+> para uso não comercial — serve para testar; no uso real nos serviços da
+> ERGA, migrar para o plano pago (≈ US$ 20/mês) ou outra hospedagem.
 
 ## Scripts
 
@@ -47,5 +58,5 @@ npm run dev                   # http://localhost:3001
 | `npm run lint` / `npm run typecheck` | Verificações |
 | `npm run db:migrate` | Cria/aplica migrations (desenvolvimento) |
 | `npm run db:deploy` | Aplica migrations (produção) |
-| `npm run db:seed` | Cria/atualiza o administrador |
+| `npm run db:seed` | Cria/atualiza o administrador pelo `.env` (uso local) |
 | `npm run crm:mock` | CRMEx simulado para desenvolvimento |

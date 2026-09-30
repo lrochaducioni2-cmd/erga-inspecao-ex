@@ -14,3 +14,7 @@ export const updateUserSchema = z.object({
   role: z.enum(userRoleValues).optional(),
   password: z.string().min(8, "Senha deve ter pelo menos 8 caracteres.").optional(),
 });
+
+export const firstAccessSchema = createUserSchema.omit({ role: true }).extend({
+  setupCode: z.string().trim().min(1, "Informe o código de instalação."),
+});
