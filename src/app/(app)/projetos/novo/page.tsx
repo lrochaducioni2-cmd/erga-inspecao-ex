@@ -2,10 +2,19 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { isCrmConfigured } from "@/lib/crm-client";
 import { ProjectForm } from "@/components/project-form";
+import { DEFAULT_TECHNICAL_LEAD } from "@/lib/projects";
 
 export default async function NovoProjetoPage() {
-  // Sugere o próximo PI (maior PI + 1); o usuário pode trocar.
-  const last = await prisma.project.findFirst({ orderBy: { pi: "desc" }, select: { pi: true } });
+  // Sugere o próximo PI (maior PI + 1) e repete responsável técnico e CREA
+  // do último projeto criado; tudo editável.
+  const [last, recent] = await Promise.all([
+    prisma.project.findFirst({ orderBy: { pi: "desc" }, select: { pi: true } }),
+    prisma.project.findFirst({
+      where: { technicalLead: { not: null } },
+      orderBy: { createdAt: "desc" },
+      select: { technicalLead: true, crea: true },
+    }),
+  ]);
 
   return (
     <div className="mx-auto max-w-3xl space-y-5">
@@ -23,8 +32,8 @@ export default async function NovoProjetoPage() {
           crmEmpresaId: null,
           clientName: "",
           location: "",
-          technicalLead: "",
-          crea: "",
+          technicalLead: recent?.technicalLead ?? DEFAULT_TECHNICAL_LEAD,
+          crea: recent?.crea ?? "",
           proposalNumber: "",
           contractNumber: "",
           notes: "",

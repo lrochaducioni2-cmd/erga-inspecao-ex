@@ -1,5 +1,8 @@
 // Regras de Projeto (Fase 2 do ROTEIRO.md).
 
+/** Responsável técnico sugerido no primeiro projeto (depois, repete o último usado). */
+export const DEFAULT_TECHNICAL_LEAD = "Leandro Ducioni";
+
 export const PROJECT_TYPE_LABELS: Record<string, string> = {
   INVENTARIO: "Inventário",
   INSPECAO_EX: "Inspeção Ex",
