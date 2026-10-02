@@ -12,7 +12,7 @@ export default async function NovoProjetoPage() {
     prisma.project.findFirst({
       where: { technicalLead: { not: null } },
       orderBy: { createdAt: "desc" },
-      select: { technicalLead: true, crea: true },
+      select: { technicalLead: true, crea: true, technicalLeadCert: true },
     }),
   ]);
 
@@ -32,8 +32,9 @@ export default async function NovoProjetoPage() {
           crmEmpresaId: null,
           clientName: "",
           location: "",
-          technicalLead: recent?.technicalLead ?? DEFAULT_TECHNICAL_LEAD,
-          crea: recent?.crea ?? "",
+          technicalLead: recent?.technicalLead || DEFAULT_TECHNICAL_LEAD.name,
+          crea: recent?.crea || DEFAULT_TECHNICAL_LEAD.crea,
+          technicalLeadCert: recent?.technicalLeadCert || DEFAULT_TECHNICAL_LEAD.cert,
           proposalNumber: "",
           contractNumber: "",
           notes: "",

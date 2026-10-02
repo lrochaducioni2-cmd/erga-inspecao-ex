@@ -15,6 +15,7 @@ export type ProjectFormValues = {
   location: string;
   technicalLead: string;
   crea: string;
+  technicalLeadCert: string;
   proposalNumber: string;
   contractNumber: string;
   notes: string;
@@ -154,6 +155,15 @@ export function ProjectForm({ initial, crmConfigured }: { initial: ProjectFormVa
         <label className={label}>
           CREA do responsável
           <input value={values.crea} onChange={(e) => set("crea", e.target.value)} className={input} />
+        </label>
+        <label className={label}>
+          Certificado do responsável (IECEx CoPC)
+          <input
+            value={values.technicalLeadCert}
+            onChange={(e) => set("technicalLeadCert", e.target.value)}
+            placeholder="Ex.: IECEx CP …"
+            className={input}
+          />
         </label>
         <div className="grid grid-cols-2 gap-3">
           <label className={label}>

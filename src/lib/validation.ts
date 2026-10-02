@@ -43,6 +43,7 @@ const projectFields = {
   location: optionalText,
   technicalLead: optionalText,
   crea: optionalText,
+  technicalLeadCert: optionalText,
   proposalNumber: optionalText,
   contractNumber: optionalText,
   notes: z.string().trim().max(5000).optional().transform((v) => v || null),

@@ -64,12 +64,13 @@ model Project {
   crmEmpresaId String?
   clientName   String // nome exibido (cópia do CRMEx ou digitado)
 
-  location       String? // local da inspeção
-  technicalLead  String? // responsável técnico
-  crea           String?
-  proposalNumber String?
-  contractNumber String?
-  notes          String?
+  location          String? // local da inspeção
+  technicalLead     String? // responsável técnico
+  crea              String?
+  technicalLeadCert String? // certificado de competência do responsável (ex.: IECEx CoPC)
+  proposalNumber    String?
+  contractNumber    String?
+  notes             String?
 
   createdById String
   createdBy   User     @relation(fields: [createdById], references: [id])

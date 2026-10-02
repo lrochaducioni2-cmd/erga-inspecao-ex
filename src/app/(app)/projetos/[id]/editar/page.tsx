@@ -32,6 +32,7 @@ export default async function EditarProjetoPage({ params }: Props) {
           location: p.location ?? "",
           technicalLead: p.technicalLead ?? "",
           crea: p.crea ?? "",
+          technicalLeadCert: p.technicalLeadCert ?? "",
           proposalNumber: p.proposalNumber ?? "",
           contractNumber: p.contractNumber ?? "",
           notes: p.notes ?? "",

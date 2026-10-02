@@ -23,6 +23,7 @@ export default async function ProjetoPage({ params }: Props) {
     ["Local da inspeção", p.location],
     ["Responsável técnico", p.technicalLead],
     ["CREA", p.crea],
+    ["Certificado (IECEx CoPC)", p.technicalLeadCert],
     ["Nº proposta", p.proposalNumber],
     ["Nº contrato", p.contractNumber],
     ["Criado por", `${p.createdBy.name} em ${dateFormat.format(p.createdAt)}`],

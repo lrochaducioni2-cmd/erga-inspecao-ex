@@ -1,7 +1,14 @@
 // Regras de Projeto (Fase 2 do ROTEIRO.md).
 
-/** Responsável técnico sugerido no primeiro projeto (depois, repete o último usado). */
-export const DEFAULT_TECHNICAL_LEAD = "Leandro Ducioni";
+/**
+ * Responsável técnico sugerido em novos projetos. Cada campo vazio no
+ * último projeto cai neste padrão; preenchido, repete o último usado.
+ */
+export const DEFAULT_TECHNICAL_LEAD = {
+  name: "Leandro da Rocha Ducioni",
+  crea: "106659-9",
+  cert: "IECEx CP TSI22.0030",
+};
 
 export const PROJECT_TYPE_LABELS: Record<string, string> = {
   INVENTARIO: "Inventário",
