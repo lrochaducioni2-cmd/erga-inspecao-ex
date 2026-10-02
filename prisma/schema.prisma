@@ -25,4 +25,57 @@ model User {
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  projects Project[]
+}
+
+// --- Projetos (Fase 2) ---------------------------------------------------
+
+enum ProjectType {
+  INVENTARIO // cadastro rápido Ex / Não Ex + plano de ação
+  INSPECAO_EX // checklist ABNT NBR IEC 60079-17
+}
+
+enum InspectionGrade {
+  VISUAL
+  APURADA
+  DETALHADA
+}
+
+enum ProjectStatus {
+  RASCUNHO
+  EM_CAMPO
+  EM_REVISAO
+  APROVADO
+  EMITIDO
+}
+
+model Project {
+  id     String           @id @default(cuid())
+  pi     Int              @unique // nº do projeto: base da etiqueta EX-INSP-PI<pi>-0001
+  title  String
+  type   ProjectType
+  grade  InspectionGrade? // só Inspeção Ex
+  status ProjectStatus    @default(RASCUNHO)
+
+  // Cliente: vem do CRMEx (crmEmpresaId). Enquanto a API do CRMEx não está
+  // ligada, aceita um cliente provisório só com o nome digitado
+  // (crmEmpresaId nulo), que depois pode ser vinculado ao CRMEx.
+  crmEmpresaId String?
+  clientName   String // nome exibido (cópia do CRMEx ou digitado)
+
+  location       String? // local da inspeção
+  technicalLead  String? // responsável técnico
+  crea           String?
+  proposalNumber String?
+  contractNumber String?
+  notes          String?
+
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([status])
+  @@index([crmEmpresaId])
 }

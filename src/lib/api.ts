@@ -6,6 +6,13 @@ export function jsonError(error: string, status: number) {
   return NextResponse.json({ error }, { status });
 }
 
+/** Usuário logado e ativo, ou a resposta de erro pronta. */
+export async function requireUser() {
+  const user = await getCurrentUser();
+  if (!user) return { error: jsonError("Não autenticado.", 401) } as const;
+  return { user } as const;
+}
+
 /** Usuário logado e ativo com papel ADMIN, ou a resposta de erro pronta. */
 export async function requireAdmin() {
   const user = await getCurrentUser();
