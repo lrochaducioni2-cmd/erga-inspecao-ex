@@ -37,8 +37,12 @@ export function AreaForm({
       return;
     }
     if (!area) {
-      setName("");
-      setNotes("");
+      // Novo ambiente: entra direto nele para cadastrar os equipamentos.
+      const created = (await res.json().catch(() => ({}))) as { id?: string };
+      if (created.id) {
+        router.push(`/projetos/${projectId}/ambientes/${created.id}`);
+        return;
+      }
     }
     router.refresh();
     onDone?.();

@@ -71,29 +71,6 @@ export default async function ProjetoPage({ params }: Props) {
 
       <ProjectStatusControl projectId={p.id} status={p.status} isAdmin={me.role === "ADMIN"} />
 
-      <section className="rounded-2xl border border-line bg-white">
-        <div className="flex items-center justify-between border-b border-line px-5 py-3">
-          <h2 className="text-base font-bold">Dados do projeto</h2>
-          {p.status !== "EMITIDO" && (
-            <Link
-              href={`/projetos/${p.id}/editar`}
-              className="flex h-10 items-center rounded-xl border border-line px-4 text-[15px] font-semibold hover:border-brand"
-            >
-              Editar
-            </Link>
-          )}
-        </div>
-        <dl className="divide-y divide-line">
-          {dados.map(([label, value]) => (
-            <div key={label} className="flex flex-col gap-0.5 px-5 py-3 sm:flex-row sm:gap-6">
-              <dt className="text-sm font-semibold text-muted sm:w-48 sm:shrink-0">{label}</dt>
-              <dd className="text-base">{value || "—"}</dd>
-            </div>
-          ))}
-        </dl>
-        {p.notes && <p className="whitespace-pre-line border-t border-line px-5 py-4 text-[15px]">{p.notes}</p>}
-      </section>
-
       <section className="space-y-4 rounded-2xl border border-line bg-white p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-lg font-bold">{p.type === "INVENTARIO" ? "Inventário" : "Equipamentos"}</h2>
@@ -158,8 +135,14 @@ export default async function ProjetoPage({ params }: Props) {
                     <div className="min-w-0 flex-1">
                       <div className="text-base font-semibold">{a.name}</div>
                       <div className="text-sm text-muted">
-                        {total} equipamento{total === 1 ? "" : "s"}
-                        {naoEx > 0 && <span className="font-semibold text-nc"> · {naoEx} Não Ex</span>}
+                        {total === 0 && !locked ? (
+                          <span className="font-semibold text-brand">Toque para cadastrar equipamentos</span>
+                        ) : (
+                          <>
+                            {total} equipamento{total === 1 ? "" : "s"}
+                            {naoEx > 0 && <span className="font-semibold text-nc"> · {naoEx} Não Ex</span>}
+                          </>
+                        )}
                       </div>
                     </div>
                     <span className="shrink-0 rounded-lg bg-brand-soft px-2.5 py-1 text-xs font-semibold text-brand">
@@ -178,6 +161,29 @@ export default async function ProjetoPage({ params }: Props) {
           )}
         </div>
       </section>
+      <section className="rounded-2xl border border-line bg-white">
+        <div className="flex items-center justify-between border-b border-line px-5 py-3">
+          <h2 className="text-base font-bold">Dados do projeto</h2>
+          {p.status !== "EMITIDO" && (
+            <Link
+              href={`/projetos/${p.id}/editar`}
+              className="flex h-10 items-center rounded-xl border border-line px-4 text-[15px] font-semibold hover:border-brand"
+            >
+              Editar
+            </Link>
+          )}
+        </div>
+        <dl className="divide-y divide-line">
+          {dados.map(([label, value]) => (
+            <div key={label} className="flex flex-col gap-0.5 px-5 py-3 sm:flex-row sm:gap-6">
+              <dt className="text-sm font-semibold text-muted sm:w-48 sm:shrink-0">{label}</dt>
+              <dd className="text-base">{value || "—"}</dd>
+            </div>
+          ))}
+        </dl>
+        {p.notes && <p className="whitespace-pre-line border-t border-line px-5 py-4 text-[15px]">{p.notes}</p>}
+      </section>
+
     </div>
   );
 }
