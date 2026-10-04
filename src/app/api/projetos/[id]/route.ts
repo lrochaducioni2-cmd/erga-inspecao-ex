@@ -5,6 +5,7 @@ import { jsonError, parseBody, requireAdmin, requireUser } from "@/lib/api";
 import { updateProjectSchema } from "@/lib/validation";
 import { resolveClientName } from "@/lib/project-client";
 import { formatPi, statusChangeError } from "@/lib/projects";
+import { removeStoredFiles } from "@/lib/uploads";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -72,6 +73,8 @@ export async function DELETE(_request: Request, { params }: Params) {
     return jsonError("Só projetos em rascunho podem ser excluídos.", 409);
   }
 
+  const photos = await prisma.photo.findMany({ where: { projectId: id }, select: { storageKey: true } });
   await prisma.project.delete({ where: { id } });
+  await removeStoredFiles(photos.map((p) => p.storageKey));
   return NextResponse.json({ ok: true });
 }

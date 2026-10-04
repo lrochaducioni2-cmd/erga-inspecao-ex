@@ -41,9 +41,12 @@ npm run dev                   # http://localhost:3001
 
 3. Toque em **Deploy**. As tabelas do banco são criadas automaticamente a cada
    publicação (`vercel-build`).
-4. Abra a URL que a Vercel mostrar: a tela **Primeiro acesso** pede o
+4. **Fotos (Vercel Blob)** — no projeto da Vercel: **Storage › Create › Blob**,
+   escolha acesso **Private** e conecte ao projeto (cria `BLOB_READ_WRITE_TOKEN`).
+   Depois, **Deployments › ⋯ › Redeploy**.
+5. Abra a URL que a Vercel mostrar: a tela **Primeiro acesso** pede o
    `SETUP_CODE` e cria o seu usuário administrador. Ela só aparece uma vez.
-5. No iPhone: Safari › Compartilhar › **Adicionar à Tela de Início**.
+6. No iPhone: Safari › Compartilhar › **Adicionar à Tela de Início**.
 
 > `NEXTAUTH_URL` não é necessário na Vercel. O plano gratuito da Vercel é
 > para uso não comercial — serve para testar; no uso real nos serviços da

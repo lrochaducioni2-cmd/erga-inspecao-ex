@@ -59,3 +59,22 @@ export const createProjectSchema = z
 export const updateProjectSchema = z.object(projectFields).partial().extend({
   status: z.enum(statusValues).optional(),
 });
+
+// --- Inventário ---------------------------------------------------------------
+
+export const zoneValues = ["ZONA_0", "ZONA_1", "ZONA_2", "ZONA_20", "ZONA_21", "ZONA_22", "NAO_CLASSIFICADA"] as const;
+
+export const areaSchema = z.object({
+  name: z.string().trim().min(1, "Informe o nome do ambiente.").max(200),
+  zone: z.enum(zoneValues),
+  notes: z.string().trim().max(2000).optional().transform((v) => v || null),
+});
+
+export const equipmentSchema = z.object({
+  areaId: z.string().min(1, "Escolha o ambiente."),
+  name: z.string().trim().min(1, "Informe o equipamento.").max(200),
+  isEx: z.boolean({ error: "Diga se o equipamento é Ex ou Não Ex." }),
+  quantity: z.coerce.number().int().min(1, "Quantidade mínima é 1.").max(9999).default(1),
+  clientTag: z.string().trim().max(100).optional().transform((v) => v || null),
+  notes: z.string().trim().max(5000).optional().transform((v) => v || null),
+});

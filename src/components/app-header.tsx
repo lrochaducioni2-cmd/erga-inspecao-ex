@@ -10,7 +10,7 @@ export function AppHeader({ userName, links }: { userName: string; links: NavLin
   const pathname = usePathname();
 
   return (
-    <header className="bg-brand text-white">
+    <header className="bg-brand text-white print:hidden">
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 pt-3 sm:px-6">
         <Link href="/projetos" className="flex items-center gap-2">
           <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-sm font-bold text-ink">Ex</span>

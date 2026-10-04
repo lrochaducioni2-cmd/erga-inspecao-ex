@@ -3,6 +3,9 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/session";
 import { ProjectStatusControl } from "@/components/project-status-control";
+import { LogoUploader } from "@/components/logo-uploader";
+import { AreaForm } from "@/components/area-form";
+import { ZONE_LABELS } from "@/lib/inventory-rules";
 import { GRADE_LABELS, PROJECT_TYPE_LABELS, STATUS_BADGE, STATUS_LABELS, formatPi } from "@/lib/projects";
 
 type Props = { params: Promise<{ id: string }> };
@@ -12,10 +15,24 @@ const dateFormat = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeZo
 export default async function ProjetoPage({ params }: Props) {
   const { id } = await params;
   const [p, me] = await Promise.all([
-    prisma.project.findUnique({ where: { id }, include: { createdBy: { select: { name: true } } } }),
+    prisma.project.findUnique({
+      where: { id },
+      include: {
+        createdBy: { select: { name: true } },
+        areas: { orderBy: { createdAt: "asc" }, include: { equipment: { select: { isEx: true, quantity: true } } } },
+        photos: { select: { id: true, kind: true } },
+      },
+    }),
     getCurrentUser(),
   ]);
   if (!p || !me) notFound();
+
+  const locked = p.status === "EMITIDO";
+  const logo = p.photos.find((ph) => ph.kind === "LOGO");
+  const photoCount = p.photos.filter((ph) => ph.kind === "EQUIPMENT").length;
+  const allEquipment = p.areas.flatMap((a) => a.equipment);
+  const totalQty = allEquipment.reduce((n, e) => n + e.quantity, 0);
+  const exQty = allEquipment.filter((e) => e.isEx).reduce((n, e) => n + e.quantity, 0);
 
   const dados: [string, string | null][] = [
     ["Cliente", p.crmEmpresaId ? p.clientName : `${p.clientName} (provisório)`],
@@ -77,11 +94,89 @@ export default async function ProjetoPage({ params }: Props) {
         {p.notes && <p className="whitespace-pre-line border-t border-line px-5 py-4 text-[15px]">{p.notes}</p>}
       </section>
 
-      <section className="rounded-2xl border border-dashed border-line bg-white p-5">
-        <h2 className="text-base font-bold">{p.type === "INVENTARIO" ? "Inventário" : "Equipamentos e checklist"}</h2>
-        <p className="mt-1 text-[15px] text-muted">
-          Ambientes, equipamentos e fotos chegam na próxima etapa (Fase 3).
-        </p>
+      <section className="space-y-4 rounded-2xl border border-line bg-white p-5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-lg font-bold">{p.type === "INVENTARIO" ? "Inventário" : "Equipamentos"}</h2>
+          <div className="flex flex-wrap gap-2">
+            {p.type === "INVENTARIO" && (
+              <Link
+                href={`/projetos/${p.id}/plano`}
+                className="flex h-11 items-center rounded-xl border border-brand px-4 text-[15px] font-semibold text-brand"
+              >
+                Plano de ação
+              </Link>
+            )}
+            <Link
+              href={`/projetos/${p.id}/relatorio`}
+              className="flex h-11 items-center rounded-xl border border-line px-4 text-[15px] font-semibold hover:border-brand"
+            >
+              Relatório (PDF)
+            </Link>
+            <a
+              href={`/api/projetos/${p.id}/excel`}
+              className="flex h-11 items-center rounded-xl border border-line px-4 text-[15px] font-semibold hover:border-brand"
+            >
+              Excel
+            </a>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {[
+            { label: "Equipamentos", value: totalQty, cls: "" },
+            { label: "Ex", value: exQty, cls: "text-brand" },
+            { label: "Não Ex", value: totalQty - exQty, cls: "text-nc" },
+            { label: "Fotos", value: photoCount, cls: "" },
+          ].map((s) => (
+            <div key={s.label} className="rounded-xl border border-line px-4 py-3">
+              <div className={`text-2xl font-bold ${s.cls}`}>{s.value}</div>
+              <div className="text-sm text-muted">{s.label}</div>
+            </div>
+          ))}
+        </div>
+
+        <div>
+          <h3 className="mb-2 text-sm font-semibold">Logo do cliente (aparece no relatório)</h3>
+          <LogoUploader projectId={p.id} logoId={logo?.id ?? null} locked={locked} />
+        </div>
+
+        <div className="space-y-2">
+          <h3 className="text-sm font-semibold">Ambientes / pontos de liberação</h3>
+          {p.areas.length === 0 && (
+            <p className="text-[15px] text-muted">Nenhum ambiente ainda. Cadastre o primeiro abaixo.</p>
+          )}
+          <ul className="space-y-2">
+            {p.areas.map((a) => {
+              const naoEx = a.equipment.filter((e) => !e.isEx).reduce((n, e) => n + e.quantity, 0);
+              const total = a.equipment.reduce((n, e) => n + e.quantity, 0);
+              return (
+                <li key={a.id}>
+                  <Link
+                    href={`/projetos/${p.id}/ambientes/${a.id}`}
+                    className="flex min-h-16 items-center gap-3 rounded-2xl border border-line px-4 py-3 hover:border-brand"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <div className="text-base font-semibold">{a.name}</div>
+                      <div className="text-sm text-muted">
+                        {total} equipamento{total === 1 ? "" : "s"}
+                        {naoEx > 0 && <span className="font-semibold text-nc"> · {naoEx} Não Ex</span>}
+                      </div>
+                    </div>
+                    <span className="shrink-0 rounded-lg bg-brand-soft px-2.5 py-1 text-xs font-semibold text-brand">
+                      {ZONE_LABELS[a.zone]}
+                    </span>
+                    <span aria-hidden="true" className="text-muted">›</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+          {!locked && (
+            <div className="rounded-2xl border border-dashed border-line p-4">
+              <AreaForm projectId={p.id} />
+            </div>
+          )}
+        </div>
       </section>
     </div>
   );
