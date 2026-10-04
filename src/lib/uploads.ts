@@ -34,7 +34,9 @@ export async function receivePhoto(
   } catch (error) {
     if (error instanceof StorageNotConfiguredError) return { error: jsonError(error.message, 503) } as const;
     console.error("storage.save", error);
-    return { error: jsonError("Não foi possível guardar a foto. Tente de novo.", 502) } as const;
+    // Mostra o motivo dado pelo armazenamento (ex.: credencial, store suspenso).
+    const reason = error instanceof Error && error.message ? ` (${error.message.slice(0, 200)})` : "";
+    return { error: jsonError(`Não foi possível guardar a foto${reason}.`, 502) } as const;
   }
 
   try {

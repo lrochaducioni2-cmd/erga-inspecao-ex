@@ -1,8 +1,8 @@
 // Armazenamento de arquivos (fotos e logos).
 //
-//   - Produção (Vercel): Vercel Blob em modo PRIVADO — exige a variável
-//     BLOB_READ_WRITE_TOKEN, criada automaticamente ao ligar um Blob store
-//     ao projeto na Vercel. Os arquivos não têm link público; o app os
+//   - Produção (Vercel): Vercel Blob em modo PRIVADO. Ao ligar o Blob store
+//     ao projeto, a Vercel cria BLOB_READ_WRITE_TOKEN (chave) ou BLOB_STORE_ID
+//     (autenticação OIDC automática da Vercel) — os dois funcionam. Os arquivos não têm link público; o app os
 //     entrega só a usuários logados (rota /api/fotos/:id).
 //   - Desenvolvimento: pasta local (STORAGE_LOCAL_DIR, padrão .data/uploads).
 //
@@ -77,7 +77,7 @@ const localDriver: StorageDriver = {
 };
 
 function driver(): StorageDriver {
-  if (process.env.BLOB_READ_WRITE_TOKEN) return blobDriver;
+  if (process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID) return blobDriver;
   if (process.env.VERCEL) throw new StorageNotConfiguredError();
   return localDriver;
 }
