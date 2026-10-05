@@ -37,7 +37,7 @@ relatórios e exportações no computador.
 
 ## Princípios de tela (protótipo aprovado)
 
-- Celular = coleta rápida; computador = revisão, relatório e exportação.
+- Celular = **só coleta de informações** (modo campo); computador = revisão, relatório PDF e Excel. Botões de PDF/Excel não aparecem em telas de celular.
 - Botões grandes (≥ 44 px, maiores no celular), respostas em botões e não em listas suspensas.
 - Foto primeiro; não digitar o que já se sabe (cliente do CRMEx, herança do ambiente, duplicar anterior).
 - Sem botão "Salvar" em campo: salvamento automático e estado de sincronização sempre visível.

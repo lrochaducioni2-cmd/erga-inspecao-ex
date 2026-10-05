@@ -92,15 +92,16 @@ export default async function ProjetoPage({ params }: Props) {
                 Plano de ação
               </Link>
             )}
+            {/* Relatório e Excel são tarefas do computador: escondidos em telas de celular. */}
             <Link
               href={`/projetos/${p.id}/relatorio`}
-              className="flex h-11 items-center rounded-xl border border-line px-4 text-[15px] font-semibold hover:border-brand"
+              className="hidden h-11 items-center rounded-xl border border-line px-4 text-[15px] font-semibold hover:border-brand md:flex"
             >
               Relatório (PDF)
             </Link>
             <a
               href={`/api/projetos/${p.id}/excel`}
-              className="flex h-11 items-center rounded-xl border border-line px-4 text-[15px] font-semibold hover:border-brand"
+              className="hidden h-11 items-center rounded-xl border border-line px-4 text-[15px] font-semibold hover:border-brand md:flex"
             >
               Excel
             </a>
