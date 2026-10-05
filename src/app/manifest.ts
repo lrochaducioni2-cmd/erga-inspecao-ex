@@ -7,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Inspeção Ex · ERGA Engenharia",
     short_name: "Inspeção Ex",
     description: "Inventário e inspeção de equipamentos Ex (ABNT NBR IEC 60079-17).",
-    start_url: "/projetos",
+    start_url: "/campo",
     display: "standalone",
     background_color: "#F2F3EF",
     theme_color: "#16405F",

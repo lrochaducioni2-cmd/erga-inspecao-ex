@@ -75,6 +75,15 @@ export default async function ProjetoPage({ params }: Props) {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-lg font-bold">{p.type === "INVENTARIO" ? "Inventário" : "Equipamentos"}</h2>
           <div className="flex flex-wrap gap-2">
+            {!locked && (
+              // Link comum: abre o modo campo (funciona sem internet) já neste projeto.
+              <a
+                href={`/campo#/p/${p.id}`}
+                className="flex h-11 items-center rounded-xl bg-brand px-4 text-[15px] font-semibold text-white"
+              >
+                Levar para o campo
+              </a>
+            )}
             {p.type === "INVENTARIO" && (
               <Link
                 href={`/projetos/${p.id}/plano`}

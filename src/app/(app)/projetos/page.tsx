@@ -36,14 +36,23 @@ export default async function ProjetosPage({ searchParams }: Props) {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold">Projetos</h1>
-        <Link
-          href="/projetos/novo"
-          className="flex h-12 items-center rounded-xl bg-brand px-5 text-base font-semibold text-white hover:bg-brand-dark"
-        >
-          + Novo projeto
-        </Link>
+        <div className="flex gap-2">
+          {/* Link comum: o modo campo é uma tela própria que funciona sem internet. */}
+          <a
+            href="/campo"
+            className="flex h-12 items-center rounded-xl border border-brand px-4 text-base font-semibold text-brand"
+          >
+            Modo campo
+          </a>
+          <Link
+            href="/projetos/novo"
+            className="flex h-12 items-center rounded-xl bg-brand px-5 text-base font-semibold text-white hover:bg-brand-dark"
+          >
+            + Novo projeto
+          </Link>
+        </div>
       </div>
 
       <form method="get" role="search" className="flex gap-2">

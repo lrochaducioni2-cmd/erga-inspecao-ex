@@ -52,6 +52,14 @@ npm run dev                   # http://localhost:3001
 > para uso não comercial — serve para testar; no uso real nos serviços da
 > ERGA, migrar para o plano pago (≈ US$ 20/mês) ou outra hospedagem.
 
+## Modo campo (sem internet)
+
+`/campo` é a parte do app que funciona sem sinal (o app instalado no celular
+abre nela). Com internet, toque em **Baixar** no projeto; em campo, cadastre
+ambientes, equipamentos e fotos normalmente — tudo fica no aparelho e é
+enviado sozinho quando a internet voltar (faixa no topo mostra o que falta
+enviar). Código em `src/lib/field/` e `public/sw.js`.
+
 ## Scripts
 
 | Comando | O que faz |

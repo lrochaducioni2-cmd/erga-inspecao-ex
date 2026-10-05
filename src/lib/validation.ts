@@ -64,10 +64,11 @@ export const updateProjectSchema = z.object(projectFields).partial().extend({
 
 export const zoneValues = ["ZONA_0", "ZONA_1", "ZONA_2", "ZONA_20", "ZONA_21", "ZONA_22", "NAO_CLASSIFICADA"] as const;
 
+// Campos opcionais aceitam ausente, "" ou null (o modo campo envia null).
 export const areaSchema = z.object({
   name: z.string().trim().min(1, "Informe o nome do ambiente.").max(200),
   zone: z.enum(zoneValues),
-  notes: z.string().trim().max(2000).optional().transform((v) => v || null),
+  notes: z.string().trim().max(2000).nullish().transform((v) => v || null),
 });
 
 export const equipmentSchema = z.object({
@@ -75,6 +76,13 @@ export const equipmentSchema = z.object({
   name: z.string().trim().min(1, "Informe o equipamento.").max(200),
   isEx: z.boolean({ error: "Diga se o equipamento é Ex ou Não Ex." }),
   quantity: z.coerce.number().int().min(1, "Quantidade mínima é 1.").max(9999).default(1),
-  clientTag: z.string().trim().max(100).optional().transform((v) => v || null),
-  notes: z.string().trim().max(5000).optional().transform((v) => v || null),
+  clientTag: z.string().trim().max(100).nullish().transform((v) => v || null),
+  notes: z.string().trim().max(5000).nullish().transform((v) => v || null),
 });
+
+// Criação vinda do modo campo: o aparelho gera o id (UUID), o que torna o
+// reenvio idempotente — se a conexão cair após o servidor gravar, o mesmo
+// envio repetido não duplica o registro.
+export const clientIdSchema = z.uuid("Identificador inválido.");
+export const createAreaSchema = areaSchema.extend({ id: clientIdSchema.optional() });
+export const createEquipmentSchema = equipmentSchema.extend({ id: clientIdSchema.optional() });

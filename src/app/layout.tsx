@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { Providers } from "@/components/session-provider";
+import { ServiceWorkerRegister } from "@/components/sw-register";
 import "./globals.css";
 
 // IBM Plex (licença OFL, ver src/fonts/OFL.txt) servida pelo próprio app:
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pt-BR" className={`${plexSans.variable} ${plexMono.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">
         <Providers>{children}</Providers>
+        <ServiceWorkerRegister />
       </body>
     </html>
   );

@@ -5,5 +5,5 @@ import { withAuth } from "next-auth/middleware";
 export default withAuth;
 
 export const config = {
-  matcher: ["/projetos/:path*", "/clientes/:path*", "/usuarios/:path*"],
+  matcher: ["/projetos/:path*", "/clientes/:path*", "/usuarios/:path*", "/campo"],
 };

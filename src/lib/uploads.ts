@@ -2,6 +2,7 @@ import type { PhotoKind } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { jsonError } from "@/lib/api";
 import { ALLOWED_IMAGE_TYPES, StorageNotConfiguredError, photoKey, storage } from "@/lib/storage";
+import { clientIdSchema } from "@/lib/validation";
 
 // O celular reduz a foto antes de enviar (src/lib/image-compress.ts); este
 // limite cobre o máximo aceito por requisição na Vercel (~4,5 MB).
@@ -23,6 +24,18 @@ export async function receivePhoto(
   }
   if (file.size > MAX_BYTES) return { error: jsonError("Foto muito grande (máx. 4 MB).", 413) } as const;
 
+  // Modo campo envia o id gerado no aparelho: reenvio da mesma foto não duplica.
+  const clientId = clientIdSchema.safeParse(form?.get("id"));
+  const id = clientId.success ? clientId.data : undefined;
+  if (id) {
+    const existing = await prisma.photo.findUnique({ where: { id } });
+    if (existing) {
+      return existing.projectId === target.projectId
+        ? ({ photo: existing } as const)
+        : ({ error: jsonError("Identificador já usado em outro projeto.", 409) } as const);
+    }
+  }
+
   const dimension = (name: string) => {
     const value = Number(form?.get(name));
     return Number.isInteger(value) && value > 0 && value < 20000 ? value : null;
@@ -43,6 +56,7 @@ export async function receivePhoto(
     const photo = await prisma.photo.create({
       data: {
         ...target,
+        ...(id && { id }),
         storageKey: key,
         contentType: file.type,
         size: file.size,

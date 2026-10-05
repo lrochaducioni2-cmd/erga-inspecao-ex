@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { jsonError, parseBody, requireUser } from "@/lib/api";
-import { equipmentSchema } from "@/lib/validation";
+import { createEquipmentSchema } from "@/lib/validation";
 import { createWithNextItem, editableProject } from "@/lib/inventory";
 
 type Params = { params: Promise<{ id: string }> };
@@ -14,8 +14,18 @@ export async function POST(request: Request, { params }: Params) {
   const target = await editableProject(id);
   if (target.error) return target.error;
 
-  const parsed = await parseBody(request, equipmentSchema);
+  const parsed = await parseBody(request, createEquipmentSchema);
   if (parsed.error) return parsed.error;
+
+  // Reenvio do modo campo: o mesmo id já gravado devolve o registro existente.
+  if (parsed.data.id) {
+    const existing = await prisma.equipment.findUnique({ where: { id: parsed.data.id } });
+    if (existing) {
+      return existing.projectId === id
+        ? NextResponse.json(existing)
+        : jsonError("Identificador já usado em outro projeto.", 409);
+    }
+  }
 
   const area = await prisma.area.findFirst({ where: { id: parsed.data.areaId, projectId: id } });
   if (!area) return jsonError("Ambiente não encontrado neste projeto.", 400);

@@ -52,7 +52,7 @@ Protótipo: https://claude.ai/artifact/T3P8qs21Yh4bGmeU8uryGh
 | **1. Base** | Repositório, login, primeiro acesso (cria o administrador sem computador), usuários, leitura de clientes do CRMEx, app instalável, publicação gratuita com migração automática | ✅ entregue |
 | **2. Projetos** | Criar/editar projeto (Inventário ou Inspeção Ex + grau), cliente do CRMEx ou **provisório** (vinculável depois), PI, dados técnicos, status Rascunho → Em campo → Em revisão → Aprovado → Emitido (aprovar/emitir só admin; emitido trava edição), busca e filtros | ✅ entregue |
 | **3. Inventário** | Logo do cliente, ambientes/pontos de liberação (zona), equipamentos Ex/Não Ex com fotos (reduzidas no aparelho, Vercel Blob privado), quantidade, TAG do cliente, etiqueta EX-INSP-PI-0001, plano de ação automático, Excel e relatório PDF provisórios | ✅ entregue |
-| 4. Celular sem internet | Coleta do inventário em campo, fila de sincronização, fotos comprimidas no aparelho | a fazer |
+| **4. Celular sem internet** | Modo campo (/campo): baixar projeto para o aparelho, criar ambientes, cadastrar/editar equipamentos com fotos sem sinal (IndexedDB), fila de envio automática e idempotente ao voltar a internet, aviso de pendências, descarte de itens recusados; app instalado abre no modo campo | ✅ entregue |
 | 5. Inspeção Ex | Checklist 60079-17, 9 status, foto/comentário por item, não conformidades, plano de ação (celular e computador) | a fazer |
 | 6. Relatórios oficiais | Aplicar os 3 modelos de documento da ERGA; pacote de backup .zip | a fazer |
 | 7. Evolução | Mais usuários, aviso de entrega ao CRMEx, migração para plano pago | a fazer |
